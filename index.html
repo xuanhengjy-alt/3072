@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3072推数字游戏</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <!-- Language Switcher -->
+  <div style="position:fixed; right:14px; top:12px; z-index:50;">
+    <label for="langSelect" class="sr-only">Language</label>
+    <select id="langSelect" class="btn-primary" style="padding:6px 10px;">
+      <option value="en" selected>English</option>
+      <option value="zh">简体中文</option>
+    </select>
+  </div>
+
+  <div class="shell">
+    <div class="container-card">
+      <header class="header">
+        <div>
+          <div class="title-wrap">
+            <h1 class="header-title text-2xl" data-i18n="title">3072 Number Merge</h1>
+          </div>
+          <div class="header-meta" data-i18n="subtitle">Merge tiles to reach 3072</div>
+        </div>
+        <div class="meta">
+          <div class="text-sm"><span id="moveCountLabel" data-i18n="steps">Steps</span>：<span id="moveCount" class="font-semibold">0</span></div>
+          <button id="restartBtn" class="btn-primary" data-i18n="restart">Restart</button>
+        </div>
+      </header>
+
+      <main>
+        <div id="board" aria-label="Board" role="grid" tabindex="0"></div>
+
+        <div class="controls" aria-label="Direction Controls">
+          <button id="btnUp" class="control-btn" aria-label="Up">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 5l7 7-1.41 1.41L13 9.83V20h-2V9.83L6.41 13.41 5 12z"/></svg>
+            <span class="sr-only" data-i18n="up">Up</span>
+          </button>
+          <button id="btnLeft" class="control-btn" aria-label="Left">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 12l7-7 1.41 1.41L9.83 11H20v2H9.83l3.58 3.59L12 18z"/></svg>
+            <span class="sr-only" data-i18n="left">Left</span>
+          </button>
+          <button id="btnDown" class="control-btn" aria-label="Down">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 19l-7-7 1.41-1.41L11 14.17V4h2v10.17l4.59-4.58L19 12z"/></svg>
+            <span class="sr-only" data-i18n="down">Down</span>
+          </button>
+          <button id="btnRight" class="control-btn" aria-label="Right">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 12l-7 7-1.41-1.41L14.17 13H4v-2h10.17l-3.58-3.59L12 6z"/></svg>
+            <span class="sr-only" data-i18n="right">Right</span>
+          </button>
+        </div>
+
+        <p class="helper" id="helper" data-i18n="helper">Tip: Use arrow keys or swipe on the board.</p>
+      </main>
+    </div>
+
+    <!-- Rules Section -->
+    <div class="container-card" style="margin-top:14px;" id="rules">
+      <h2 class="header-title text-xl" style="margin-bottom:8px;" data-i18n="rulesTitle">How to Play</h2>
+      <ol style="color:#4b5563; line-height:1.6; padding-left:1rem;">
+        <li id="rule1" data-i18n="rule1">The board is 5×5. Two 3-tiles appear at start.</li>
+        <li id="rule2" data-i18n="rule2">After every valid move, a new 3 appears at a random empty cell.</li>
+        <li id="rule3" data-i18n="rule3">Use buttons/arrow keys/swipe to shift all tiles to the edge.</li>
+        <li id="rule4" data-i18n="rule4">Adjacent equal tiles merge into their sum. A tile merges once per move.</li>
+        <li id="rule5" data-i18n="rule5">Reach 3072 to win; no moves and no merges left means game over.</li>
+        <li id="rule6" data-i18n="rule6">Use Restart anytime to reset the game.</li>
+      </ol>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="row">
+      <span>© <span id="year"></span> 3072.aithink.app</span>
+      <span>·</span>
+      <a href="/" onclick="document.getElementById('restartBtn').click(); return false;" data-i18n="restart">Restart</a>
+      <span>·</span>
+      <a href="#rules" data-i18n="rulesTitle">How to Play</a>
+    </div>
+    <div class="row" style="margin-top:4px;">
+      <a href="https://3072.aithink.app" target="_blank" rel="noopener noreferrer">https://3072.aithink.app</a>
+    </div>
+  </footer>
+
+  <!-- Modal (themed) -->
+  <div id="modal" class="modal-backdrop">
+    <canvas id="confetti" style="position:fixed; inset:0; pointer-events:none; display:none;"></canvas>
+    <div class="modal-card">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+        <div id="modalIcon" style="font-size:26px;">🎉</div>
+        <div id="modalTitle" class="modal-title">Title</div>
+      </div>
+      <div id="modalMessage" class="text-gray-700" style="margin-bottom:12px;">Message</div>
+      <div class="modal-actions">
+        <button id="playAgainBtn" class="btn-primary" data-i18n="playAgain">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="app.js"></script>
+  <script>
+    (function(){
+      var y=document.getElementById('year'); if(y){ y.textContent = new Date().getFullYear(); }
+    })();
+  </script>
+</body>
+</html>
